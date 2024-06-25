@@ -10,12 +10,21 @@ const cacheMiddleware = {
       return null;
     }
   },
+
   set: async (key: string, value: any, ttl: number = 3600): Promise<void> => {
     // ttl in seconds (default 1 hour)
     try {
       await redis.set(key, JSON.stringify(value), "EX", ttl);
     } catch (err) {
       console.error("Error setting data to Redis", err);
+    }
+  },
+
+  del: async (key: string): Promise<void> => {
+    try {
+      await redis.del(key);
+    } catch (err) {
+      console.error("Error deleting data from Redis", err);
     }
   },
 };
